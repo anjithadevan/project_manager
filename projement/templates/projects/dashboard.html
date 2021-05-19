@@ -9,6 +9,7 @@
                     <th width="30%">Company</th>
                     <th width="15%">Estimated</th>
                     <th width="15%">Actual</th>
+                    <th width="15%">End Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,7 @@
                         <td>{{ project.company.name }}</td>
                         <td>{{ project.total_estimated_hours }}</td>
                         <td>{{ project.total_actual_hours }}</td>
+                        <td>{% if project.end_date%}{{project.end_date}}{% else %} - {% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
