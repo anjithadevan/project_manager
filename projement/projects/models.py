@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 from decimal import Decimal
+from django.contrib.auth.models import User
 
 
 class Company(models.Model):
@@ -56,3 +57,16 @@ class Project(models.Model):
     @property
     def is_over_budget(self):
         return self.total_actual_hours > self.total_estimated_hours
+
+
+class LogActualHourEdit(models.Model):
+    class Meta:
+        verbose_name_plural = "Log actual hour edits"
+
+    changed_by = models.ForeignKey(User, related_name='log_changed_by', on_delete=models.CASCADE)
+    changed_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    initial_value = models.DecimalField(max_digits=5, decimal_places=2)
+    change_delta = models.DecimalField(max_digits=5, decimal_places=2)
+    final_value = models.DecimalField(max_digits=5, decimal_places=2)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
