@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from projects.models import Company, Project
+from projects.models import Company, Project, LogActualHourEdit
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -23,3 +23,4 @@ class ProjectAdmin(admin.ModelAdmin):
 
 admin.site.register(Company)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(LogActualHourEdit)
