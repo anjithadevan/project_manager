@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
+from django.urls import reverse
 
-from projects.models import Project
+from projects.models import Project, LogActualHourEdit, Tag
 
 
 class DashboardTestCase(TestCase):
@@ -38,6 +39,13 @@ class DashboardTestCase(TestCase):
         projects = response.context['projects']
         self.assertEqual(len(projects), 3)
 
+    def test_edit_project(self):
+
+        self.project = Project.objects.latest('id')
+        update_url = reverse('project-update', args=(self.project.pk, self.project.title))
+        response = self.authenticated_client.post(update_url, {}, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
 
 class ProjectsTestCase(TestCase):
     fixtures = ['projects/fixtures/initial.json']
@@ -64,3 +72,17 @@ class ProjectsTestCase(TestCase):
     def test_total_actual_hours(self):
 
         self.assertListEqual([p.total_actual_hours for p in self.projects], [739, 60, 5])
+
+
+class TagTestCase(TestCase):
+
+    def setUp(self):
+        super().setUp()
+
+    def test_creation(self):
+        tags_count_initial = Tag.objects.all().count()
+        Tag.objects.create(name="test")
+        tags_count_now = Tag.objects.all()
+        self.assertNotEqual(tags_count_initial, tags_count_now.count())
+        Tag.objects.all().delete()
+        self.assertEqual(tags_count_initial, tags_count_now.count())

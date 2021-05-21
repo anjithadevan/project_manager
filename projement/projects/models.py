@@ -44,7 +44,7 @@ class Project(models.Model):
     estimated_testing = models.PositiveSmallIntegerField('Estimated testing hours')
     actual_testing = models.DecimalField('Actual testing hours', default=0, max_digits=5, decimal_places=2,
                                          validators=[MinValueValidator(Decimal('0.00'))])
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, null=True,)
 
     def __str__(self):
         return self.title
@@ -80,3 +80,6 @@ class LogActualHourEdit(models.Model):
     change_delta = models.DecimalField(max_digits=5, decimal_places=2)
     final_value = models.DecimalField(max_digits=5, decimal_places=2)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.changed_by.username + ", " + self.project.title
