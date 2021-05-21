@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
+        <table class="table table-bordered table-striped table-hover" id="contentTable">
             <thead>
                 <tr>
                     <th width="40%">Project</th>
@@ -13,6 +13,7 @@
                 </tr>
             </thead>
             <tbody>
+            <button class="excel-download"><a id="downloadLink" onclick="downloadExcel(this)">Export to excel</a></button>
                 {% for project in projects %}
                     <tr>
                         <td>
@@ -34,4 +35,14 @@
             </tbody>
         </table>
     </div>
+<script>
+function downloadExcel(elem) {
+  var table = document.getElementById("contentTable");
+  var html = table.outerHTML;
+  var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+  elem.setAttribute("href", url);
+  elem.setAttribute("download", "product_details.xls"); // Choose the file name
+  return false;
+}
+</script>
 {% endblock content %}
