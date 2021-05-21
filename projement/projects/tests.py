@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
+from django.urls import reverse
 
-from projects.models import Project
+from projects.models import Project, LogActualHourEdit
 
 
 class DashboardTestCase(TestCase):
@@ -37,6 +38,13 @@ class DashboardTestCase(TestCase):
         response = self.authenticated_client.get('/dashboard/')
         projects = response.context['projects']
         self.assertEqual(len(projects), 3)
+
+    def test_edit_project(self):
+
+        self.project = Project.objects.latest('id')
+        update_url = reverse('project-update', args=(self.project.pk, self.project.title))
+        response = self.authenticated_client.post(update_url, {}, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
 
 class ProjectsTestCase(TestCase):
