@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from projects.models import Project, LogActualHourEdit
+from projects.models import Project, LogActualHourEdit, Tag
 
 
 class DashboardTestCase(TestCase):
@@ -72,3 +72,17 @@ class ProjectsTestCase(TestCase):
     def test_total_actual_hours(self):
 
         self.assertListEqual([p.total_actual_hours for p in self.projects], [739, 60, 5])
+
+
+class TagTestCase(TestCase):
+
+    def setUp(self):
+        super().setUp()
+
+    def test_creation(self):
+        tags_count_initial = Tag.objects.all().count()
+        Tag.objects.create(name="test")
+        tags_count_now = Tag.objects.all()
+        self.assertNotEqual(tags_count_initial, tags_count_now.count())
+        Tag.objects.all().delete()
+        self.assertEqual(tags_count_initial, tags_count_now.count())
