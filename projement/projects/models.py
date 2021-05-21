@@ -17,6 +17,15 @@ class Company(models.Model):
         return self.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=16)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Project(models.Model):
     company = models.ForeignKey('projects.Company', on_delete=models.PROTECT, related_name='projects')
 
@@ -35,6 +44,7 @@ class Project(models.Model):
     estimated_testing = models.PositiveSmallIntegerField('Estimated testing hours')
     actual_testing = models.DecimalField('Actual testing hours', default=0, max_digits=5, decimal_places=2,
                                          validators=[MinValueValidator(Decimal('0.00'))])
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.title
